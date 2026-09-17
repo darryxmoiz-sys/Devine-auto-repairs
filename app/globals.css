@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+/*
+  DESIGN SYSTEM — grounded in the actual trade, not a generic auto-shop kit.
+
+  Color comes from three real things in this business's world:
+  1. Asphalt and workshop shadow at night (the ink tones)
+  2. Job-docket paper (the warm paper tone — where copy sits)
+  3. Two functional signals a recovery/plant technician actually sees:
+     the amber hazard beacon on a flatbed, and the deep red of the branded
+     van/warning tape. Both are used as SIGNALS (status, urgency) not as
+     flat brand decoration smeared across the page.
+*/
+
+@theme {
+  /* ---- Ink: warm asphalt, not flat #000 ---- */
+  --color-ink: #15130f;
+  --color-ink-soft: #211d17;
+  --color-dusk: #232a38; /* the slate-blue of a roadside sky at dusk — alt dark section bg */
+
+  /* ---- Paper: docket / work-order paper, warm not sterile ---- */
+  --color-paper: #f1ede3;
+  --color-paper-dim: #e6e0d1;
+
+  /* ---- Steel: neutral mid tones, concrete and galvanised metal ---- */
+  --color-steel: #6d6a5f;
+  --color-steel-light: #b7b2a2;
+
+  /* ---- Signal: deep van red — reserved for the primary action only ---- */
+  --color-signal: #a82a1f;
+  --color-signal-hover: #8c2319;
+
+  /* ---- Beacon: hazard amber — reserved for urgency/recovery status only ---- */
+  --color-beacon: #dd8f10;
+  --color-beacon-soft: #f4d9a3;
+
+  --font-display: var(--font-shoulders), "Arial Narrow", sans-serif;
+  --font-body: var(--font-plex), "Segoe UI", sans-serif;
+
+  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-paper);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+}
+
+/* Docket rule — a thin horizontal divider used to separate list rows,
+   evoking a job sheet rather than a decorative section break. */
+.docket-row {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+/* The one recurring signature mark: a small rotated square, like a stamp
+   or a hazard corner-tag. Used sparingly — header mark, footer mark,
+   the beacon indicator. Never used as a bullet or repeated decoration. */
+.stamp-mark {
+  width: 0.55rem;
+  height: 0.55rem;
+  background: var(--color-signal);
+  transform: rotate(45deg);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ---- The single signature motion moment: the hero load sequence ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .load-in {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: load-in 0.7s var(--ease-settle) forwards;
+  }
+}
+
+@keyframes load-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- The beacon pulse: a real functional indicator (on call / active),
+   not decoration. Used exactly once, on the hero photo overlay. ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .beacon-dot {
+    position: relative;
+  }
+  .beacon-dot::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 999px;
+    background: var(--color-beacon);
+    opacity: 0.45;
+    animation: beacon-pulse 2.2s ease-out infinite;
+  }
+}
+
+@keyframes beacon-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+/* Skeleton shimmer for loading.tsx */
+.skeleton {
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--color-steel-light) 35%, transparent) 30%,
+    color-mix(in srgb, var(--color-steel-light) 55%, transparent) 50%,
+    color-mix(in srgb, var(--color-steel-light) 35%, transparent) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 150% 0; }
+  100% { background-position: -50% 0; }
+}
